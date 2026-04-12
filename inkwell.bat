@@ -1,9 +1,6 @@
 @echo off
 setlocal enabledelayedexpansion
 
-REM === Set UTF-8 codepage for box-drawing characters ===
-chcp 65001 >nul 2>nul
-
 REM === Script directory (where inkwell.bat lives) ===
 set "SCRIPT_DIR=%~dp0"
 
@@ -16,17 +13,17 @@ REM ============================================================
 :Welcome
 cls
 echo.
-echo   ╔══════════════════════════════════════╗
-echo   ║                                      ║
-echo   ║           I N K W E L L              ║
-echo   ║     Etsy Product Setup Tool          ║
-echo   ║                                      ║
-echo   ╚══════════════════════════════════════╝
+echo   +======================================+
+echo   :                                      :
+echo   :           I N K W E L L              :
+echo   :     Etsy Product Setup Tool          :
+echo   :                                      :
+echo   +======================================+
 echo.
 echo   Create a new product folder with everything
 echo   you need to design, export, and list on Etsy.
 echo.
-echo   ────────────────────────────────────────
+echo   ========================================
 echo.
 
 REM ============================================================
@@ -133,7 +130,7 @@ REM  :Confirm — Show summary and ask for confirmation
 REM ============================================================
 :Confirm
 echo.
-echo   ────────────────────────────────────────
+echo   ========================================
 echo   Here's what will be created:
 echo.
 echo     Type:     !TYPE_NAME!
@@ -142,7 +139,7 @@ if not "!PRODUCT_NAME!"=="" (
     echo     Name:     !PRODUCT_NAME!
 )
 echo     Folder:   !CATEGORY!\!FOLDER_NAME!
-echo   ────────────────────────────────────────
+echo   ========================================
 echo.
 
 set "CONFIRM="
@@ -210,7 +207,7 @@ REM ============================================================
 REM === Append type-specific tips ===
 if "!PRODUCT_TYPE!"=="1" (
     (
-        echo ────────────────────────────────────────
+        echo ========================================
         echo TIPS FOR PLANNERS:
         echo.
         echo   - A5 and Letter are the most popular sizes on Etsy
@@ -223,7 +220,7 @@ if "!PRODUCT_TYPE!"=="1" (
 )
 if "!PRODUCT_TYPE!"=="2" (
     (
-        echo ────────────────────────────────────────
+        echo ========================================
         echo TIPS FOR JOURNALS:
         echo.
         echo   - The cover design is what buyers see first — make it stand out
@@ -236,7 +233,7 @@ if "!PRODUCT_TYPE!"=="2" (
 )
 if "!PRODUCT_TYPE!"=="3" (
     (
-        echo ────────────────────────────────────────
+        echo ========================================
         echo TIPS FOR PRINTABLES:
         echo.
         echo   - Always design at 300 DPI for sharp printing
@@ -249,7 +246,7 @@ if "!PRODUCT_TYPE!"=="3" (
 )
 if "!PRODUCT_TYPE!"=="4" (
     (
-        echo ────────────────────────────────────────
+        echo ========================================
         echo TIPS FOR WORKBOOKS:
         echo.
         echo   - Clearly state the target age range in your listing
@@ -456,25 +453,25 @@ REM  :Summary — Print what was created
 REM ============================================================
 :Summary
 echo.
-echo   ────────────────────────────────────────
+echo   ========================================
 echo   Done! Here's what was created:
-echo   ────────────────────────────────────────
+echo   ========================================
 echo.
 echo   !CATEGORY!\!FOLDER_NAME!\
-echo     ├── Source Files\
-echo     ├── Exports\
-echo     ├── Mockups\
-echo     ├── Listing\
-echo     │   └── listing.txt
-echo     ├── Assets\
-echo     ├── README.txt
-echo     ├── tasks.md
-echo     └── notes.md
+echo     +-- Source Files\
+echo     +-- Exports\
+echo     +-- Mockups\
+echo     +-- Listing\
+echo     :   +-- listing.txt
+echo     +-- Assets\
+echo     +-- README.txt
+echo     +-- tasks.md
+echo     +-- notes.md
 echo.
-echo   ────────────────────────────────────────
+echo   ========================================
 echo   Next step: Open listing.txt and start
 echo   filling in your Etsy listing details!
-echo   ────────────────────────────────────────
+echo   ========================================
 echo.
 
 REM ============================================================
