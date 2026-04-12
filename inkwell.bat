@@ -7,38 +7,55 @@ set "SCRIPT_DIR=%~dp0"
 REM === Today's date ===
 set "TODAY=%date%"
 
+REM === Enable ANSI escape codes (Windows 10+) ===
+for /f %%a in ('echo prompt $E ^| cmd') do set "E=%%a"
+
+REM === Colour shortcuts ===
+set "R=%E%[0m"
+set "DIM=%E%[90m"
+set "WHITE=%E%[97m"
+set "CYAN=%E%[96m"
+set "GREEN=%E%[92m"
+set "YELLOW=%E%[93m"
+set "RED=%E%[91m"
+set "MAGENTA=%E%[95m"
+set "BOLD=%E%[1m"
+set "BG=%E%[100m"
+
 REM ============================================================
-REM  :Welcome — Banner and introduction
+REM  :Welcome
 REM ============================================================
 :Welcome
 cls
 echo.
-echo   +======================================+
-echo   :                                      :
-echo   :           I N K W E L L              :
-echo   :     Etsy Product Setup Tool          :
-echo   :                                      :
-echo   +======================================+
+echo  %DIM%  ___         __                 __ __%R%
+echo  %DIM% ^|_ _^|_ __   / /__ __      _____/ // /%R%
+echo  %CYAN%  ^| ^|^| '_ \ / / /\ \ /\ / / _ \ // / %R%
+echo  %CYAN%  ^| ^|^| ^| ^| ^/ /\ \  V  V /  __/ // /  %R%
+echo  %WHITE% ^|___^|_^| ^|_\/ \/  \_/\_/ \___)__/_/   %R%
 echo.
-echo   Create a new product folder with everything
-echo   you need to design, export, and list on Etsy.
+echo  %DIM% ............................................%R%
+echo  %WHITE%  Etsy Digital Product Setup Tool%R%
+echo  %DIM% ............................................%R%
 echo.
-echo   ========================================
+echo  %DIM% Create a new product folder with everything%R%
+echo  %DIM% you need to design, export, and list on Etsy.%R%
 echo.
 
 REM ============================================================
-REM  :ChooseType — Product type selection
+REM  :ChooseType
 REM ============================================================
 :ChooseType
-echo   What type of product are you creating?
 echo.
-echo     1) Planner
-echo     2) Journal
-echo     3) Printable
-echo     4) Workbook
+echo  %WHITE% What type of product are you creating?%R%
+echo.
+echo  %CYAN%   [1]%R%  Planner
+echo  %CYAN%   [2]%R%  Journal
+echo  %CYAN%   [3]%R%  Printable
+echo  %CYAN%   [4]%R%  Workbook
 echo.
 set "PRODUCT_TYPE="
-set /p "PRODUCT_TYPE=  Pick a number (1-4): "
+set /p "PRODUCT_TYPE= %YELLOW% >> %R% Pick a number (1-4): "
 
 REM === Validate type selection ===
 if "!PRODUCT_TYPE!"=="1" (
@@ -67,12 +84,12 @@ if "!PRODUCT_TYPE!"=="4" (
 )
 
 echo.
-echo   That's not one of the options — pick a number from 1 to 4!
+echo  %RED% x%R%  That's not one of the options — pick a number from 1 to 4!
 echo.
 goto :ChooseType
 
 REM ============================================================
-REM  :AutoNumber — Count existing products and assign next number
+REM  :AutoNumber
 REM ============================================================
 :AutoNumber
 set "CATEGORY_PATH=%SCRIPT_DIR%%CATEGORY%"
@@ -97,15 +114,15 @@ if !NEXT! lss 10 (
 set "PRODUCT_ID=!PREFIX!-!NUM!"
 
 echo.
-echo   Next available number: !PRODUCT_ID!
+echo  %GREEN% *%R%  Next available number: %BOLD%%WHITE%!PRODUCT_ID!%R%
 echo.
 
 REM ============================================================
-REM  :EnterName — Optional product name
+REM  :EnterName
 REM ============================================================
 :EnterName
 set "PRODUCT_NAME="
-set /p "PRODUCT_NAME=  Give it a name (or press Enter to skip): "
+set /p "PRODUCT_NAME= %YELLOW% >> %R% Give it a name (or press Enter to skip): "
 
 REM === Build the folder name ===
 if "!PRODUCT_NAME!"=="" (
@@ -119,62 +136,69 @@ set "PRODUCT_PATH=!CATEGORY_PATH!\!FOLDER_NAME!"
 REM === Check if folder already exists ===
 if exist "!PRODUCT_PATH!" (
     echo.
-    echo   A folder called "!FOLDER_NAME!" already exists!
-    echo   Please choose a different name.
+    echo  %RED% x%R%  A folder called %WHITE%"!FOLDER_NAME!"%R% already exists!
+    echo    Please choose a different name.
     echo.
     goto :EnterName
 )
 
 REM ============================================================
-REM  :Confirm — Show summary and ask for confirmation
+REM  :Confirm
 REM ============================================================
 :Confirm
 echo.
-echo   ========================================
-echo   Here's what will be created:
+echo  %DIM% ............................................%R%
+echo  %WHITE%  Here's what will be created:%R%
+echo  %DIM% ............................................%R%
 echo.
-echo     Type:     !TYPE_NAME!
-echo     ID:       !PRODUCT_ID!
+echo    %DIM%Type     %WHITE%!TYPE_NAME!%R%
+echo    %DIM%ID       %CYAN%!PRODUCT_ID!%R%
 if not "!PRODUCT_NAME!"=="" (
-    echo     Name:     !PRODUCT_NAME!
+    echo    %DIM%Name     %WHITE%!PRODUCT_NAME!%R%
 )
-echo     Folder:   !CATEGORY!\!FOLDER_NAME!
-echo   ========================================
+echo    %DIM%Folder   %WHITE%!CATEGORY!\!FOLDER_NAME!%R%
+echo.
+echo  %DIM% ............................................%R%
 echo.
 
 set "CONFIRM="
-set /p "CONFIRM=  Look good? (Y/N): "
+set /p "CONFIRM= %YELLOW% >> %R% Look good? (%GREEN%Y%R%/%RED%N%R%): "
 
 if /i "!CONFIRM!"=="Y" goto :CreateFolders
 if /i "!CONFIRM!"=="N" (
     echo.
-    echo   No worries! Run the script again when you're ready.
+    echo  %DIM% No worries! Run the script again when you're ready.%R%
     goto :End
 )
 echo.
-echo   Please type Y or N.
+echo  %RED% x%R%  Please type Y or N.
 goto :Confirm
 
 REM ============================================================
-REM  :CreateFolders — Create the directory structure
+REM  :CreateFolders
 REM ============================================================
 :CreateFolders
 echo.
-echo   Creating folders...
+echo  %DIM% Creating your product...%R%
+echo.
 
 mkdir "!PRODUCT_PATH!\Source Files" 2>nul
 if !ERRORLEVEL! neq 0 (
-    echo.
-    echo   ERROR: Could not create folders. Check you have permission to write here.
+    echo  %RED% x  ERROR: Could not create folders. Check you have permission to write here.%R%
     goto :End
 )
 mkdir "!PRODUCT_PATH!\Exports" 2>nul
+echo  %GREEN% +%R%  Source Files
 mkdir "!PRODUCT_PATH!\Mockups" 2>nul
+echo  %GREEN% +%R%  Exports
 mkdir "!PRODUCT_PATH!\Listing" 2>nul
+echo  %GREEN% +%R%  Mockups
 mkdir "!PRODUCT_PATH!\Assets" 2>nul
+echo  %GREEN% +%R%  Listing
+echo  %GREEN% +%R%  Assets
 
 REM ============================================================
-REM  :CreateReadme — README.txt with folder guide
+REM  :CreateReadme
 REM ============================================================
 :CreateReadme
 (
@@ -258,8 +282,10 @@ if "!PRODUCT_TYPE!"=="4" (
     ) >> "!PRODUCT_PATH!\README.txt"
 )
 
+echo  %GREEN% +%R%  README.txt
+
 REM ============================================================
-REM  :CreateListing — listing.txt with guided Etsy prompts
+REM  :CreateListing
 REM ============================================================
 :CreateListing
 (
@@ -395,8 +421,10 @@ if "!PRODUCT_TYPE!"=="4" (
     ) >> "!PRODUCT_PATH!\Listing\listing.txt"
 )
 
+echo  %GREEN% +%R%  listing.txt
+
 REM ============================================================
-REM  :CreateTasks — tasks.md with product checklist
+REM  :CreateTasks
 REM ============================================================
 :CreateTasks
 (
@@ -414,8 +442,10 @@ REM ============================================================
     echo - [ ] **Done!** — Celebrate your new product!
 ) > "!PRODUCT_PATH!\tasks.md"
 
+echo  %GREEN% +%R%  tasks.md
+
 REM ============================================================
-REM  :CreateNotes — notes.md with design notes template
+REM  :CreateNotes
 REM ============================================================
 :CreateNotes
 
@@ -448,38 +478,42 @@ if "!PRODUCT_NAME!"=="" (
     echo -
 ) > "!PRODUCT_PATH!\notes.md"
 
+echo  %GREEN% +%R%  notes.md
+
 REM ============================================================
-REM  :Summary — Print what was created
+REM  :Summary
 REM ============================================================
 :Summary
 echo.
-echo   ========================================
-echo   Done! Here's what was created:
-echo   ========================================
 echo.
-echo   !CATEGORY!\!FOLDER_NAME!\
-echo     +-- Source Files\
-echo     +-- Exports\
-echo     +-- Mockups\
-echo     +-- Listing\
-echo     :   +-- listing.txt
-echo     +-- Assets\
-echo     +-- README.txt
-echo     +-- tasks.md
-echo     +-- notes.md
+echo  %DIM% ............................................%R%
+echo  %GREEN%  Done!%R% Your new product is ready.
+echo  %DIM% ............................................%R%
 echo.
-echo   ========================================
-echo   Next step: Open listing.txt and start
-echo   filling in your Etsy listing details!
-echo   ========================================
+echo    %DIM%Folder%R%   %WHITE%!CATEGORY!\!FOLDER_NAME!\%R%
+echo.
+echo    %DIM%Inside:%R%
+echo    %CYAN%  +-- %R%Source Files\
+echo    %CYAN%  +-- %R%Exports\
+echo    %CYAN%  +-- %R%Mockups\
+echo    %CYAN%  +-- %R%Listing\listing.txt
+echo    %CYAN%  +-- %R%Assets\
+echo    %CYAN%  +-- %R%README.txt
+echo    %CYAN%  +-- %R%tasks.md
+echo    %CYAN%  +-- %R%notes.md
+echo.
+echo  %DIM% ............................................%R%
+echo.
+echo  %YELLOW% *%R%  Next step: open %WHITE%tasks.md%R% and start
+echo    working through your checklist!
 echo.
 
 REM ============================================================
-REM  :End — Clean exit
+REM  :End
 REM ============================================================
 :End
 echo.
-echo   Press any key to close...
+echo  %DIM% Press any key to close...%R%
 pause >nul
 endlocal
 exit /b 0
