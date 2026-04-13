@@ -1,15 +1,16 @@
 # CLAUDE.md — Inkwell
 
-> **Description:** A Windows batch script that scaffolds folder structures for new Etsy digital product designs.
+> **Description:** A menu-driven Windows batch tool for managing Etsy digital product workflows — create, track, check, and package.
 > **Status:** Active
 
 ---
 
 ## Critical Rules
 
-- Never assume PowerShell — this must be a pure `.bat` file that works on any Windows machine
+- Pure `.bat` except for one PowerShell exception: `Compress-Archive` for zipping (ships with Windows 10+)
 - Handle spaces in product names correctly — always quote paths
-- Keep the script self-contained — no external dependencies
+- Keep the script self-contained — no external dependencies beyond the OS
+- All UI screens must clear and redraw the banner — no scrolling history
 
 ---
 
@@ -17,7 +18,18 @@
 
 ### Description
 
-Inkwell is a batch script that helps an Etsy seller set up consistent folder structures when starting a new digital product design (planners, journals, printables). The user double-clicks the script, answers a few prompts, and gets a ready-to-use project folder.
+Inkwell is a menu-driven batch tool that helps an Etsy seller manage digital product workflows. It handles folder scaffolding, progress tracking, pre-listing checks, and packaging files for upload. Designed for a non-technical user who creates planners, journals, printables, and workbooks in Adobe Illustrator.
+
+### Features
+
+| Feature | Description |
+|---------|-------------|
+| Create New Product | Folder scaffold with auto-numbering (PLN-001, JRN-002), category subfolders, template files |
+| My Products | Dashboard showing all products with progress bars from tasks.md |
+| Open Product Folder | Quick-open any product in Windows Explorer |
+| Pre-Listing Check | 5-point readiness check (exports, mockups, listing, license, tasks) |
+| Package for Etsy | Zip Exports/ folder contents for Etsy upload, with 20MB warning |
+| Brand Kit | Shared `_brand-kit.md` with colours, fonts, design guidelines |
 
 ### Tech Stack
 
@@ -25,6 +37,7 @@ Inkwell is a batch script that helps an Etsy seller set up consistent folder str
 |-------|------------|
 | Script | Windows Batch (.bat) |
 | Platform | Windows 10/11 |
+| Zip | PowerShell `Compress-Archive` (one-liner, ships with OS) |
 | Dependencies | None |
 
 ### Project Locations
@@ -50,9 +63,12 @@ Inkwell is a batch script that helps an Etsy seller set up consistent folder str
 
 ## Domain (Key Concepts)
 
-- **Product type** — the category of digital product (planner, journal, printable, custom)
-- **Scaffold** — the folder structure and template files created for each new product
-- **Listing** — the Etsy listing copy, tags, and description for a product
+- **Product type** — category of digital product (planner, journal, printable, workbook)
+- **Scaffold** — folder structure and template files created for each new product
+- **Listing** — Etsy listing copy, tags, and description (listing.md)
+- **Brand kit** — shared colours, fonts, and design guidelines (`_brand-kit.md`)
+- **Pre-listing check** — 5-point readiness validation before Etsy upload
+- **Package** — zipping Exports/ contents for Etsy digital delivery
 
 ---
 
@@ -70,13 +86,15 @@ dos2unix inkwell.bat && bash -n inkwell.bat 2>&1 || echo "Not bash-compatible (e
 
 ### Definition of Done
 
-Every piece of work must satisfy ALL of these before it's complete:
-
-- [ ] Script runs without errors on Windows
-- [ ] Folder structure is created correctly
-- [ ] Spaces in product names handled
-- [ ] Template files are created with useful content
-- [ ] User prompts are clear and friendly
+- [ ] All 6 menu options work correctly
+- [ ] Create: all 4 product types generate correct files
+- [ ] Create: spaces in names handled, skip name works
+- [ ] Dashboard: shows progress bars per product
+- [ ] Pre-listing check: shows PASS/FAIL for all 5 checks
+- [ ] Package: zips Exports/, warns if > 20MB
+- [ ] Brand kit created on first run
+- [ ] All screens have consistent banner and colours
+- [ ] ANSI colours render on Windows 10+
 
 ---
 
@@ -84,15 +102,16 @@ Every piece of work must satisfy ALL of these before it's complete:
 
 ### Code Style
 
-- Use `@echo off` at the top of every script
-- Use `setlocal enabledelayedexpansion` when needed for variable expansion
+- `@echo off` + `setlocal enabledelayedexpansion` at top
 - Comment sections with `REM ===` block headers
-- Use meaningful variable names (not single letters)
-- Quote all paths that could contain spaces: `"%PRODUCT_NAME%"`
+- Meaningful variable names (not single letters)
+- Quote all paths: `"!PRODUCT_PATH!\Subfolder"`
+- Subroutines end with `goto :eof`
+- Screen-based UI: every action does `cls` + `:DrawHeader`
 
 ### Git
 
-- Branch strategy: `main` only — this is a simple script, no `dev` branch needed
+- Branch strategy: `main` only
 - Commit format: Conventional Commits (`feat:`, `fix:`, `docs:`)
 
 ---
